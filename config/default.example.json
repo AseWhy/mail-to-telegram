@@ -1,0 +1,13 @@
+{
+    "imap": {
+        "user": "<imap user>",
+        "password": "<imap password>",
+        "host": "<imap host>",
+        "port": 143,
+        "tls": false
+    },
+    "telegram": {
+        "token": "<toke>",
+        "chatIds": [  ]
+    }
+}
