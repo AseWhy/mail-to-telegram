@@ -8,3 +8,7 @@ export function chunkSubstr(str: string, size: number) {
   
     return chunks
 }
+
+export function timeout(ms: number) {
+  return () => new Promise(resolve => setTimeout(resolve, ms));
+}

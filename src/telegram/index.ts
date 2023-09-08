@@ -7,7 +7,7 @@ import Config from "config";
 
 const bot = new TelegramBot(Config.get("telegram.token"), { polling: false });
 
-export function sendMessageOfMail(prefix: string, box: ParsedMail) {
+export async function sendMessageOfMail(box: ParsedMail) {
     let receivers: number[] = Config.get("telegram.chatIds");
     let body = '';
 
@@ -25,8 +25,8 @@ export function sendMessageOfMail(prefix: string, box: ParsedMail) {
     }
 
     for(const current of receivers) {
-        for(const chunk of chunkSubstr(`${prefix}\n${body}`, 4095)) {
-            bot.sendMessage(current, chunk);
+        for(const chunk of chunkSubstr(body, 4095)) {
+            await bot.sendMessage(current, chunk);
         }
     }
 }
