@@ -105,13 +105,15 @@ export class ImapPool extends BasePool<ParsedMail> {
                         preferences.save();
                     }
 
-                    console.log(`Pull messages ${uid} ${box.messages.total}:${preferences[uid].lastReaded}`);
-                    
-                    if(box.messages.total <= preferences[uid].lastReaded) {
+                    const lastReaded = preferences[uid].lastReaded;
+
+                    if(box.messages.total <= lastReaded) {
                         return res([]);
                     }
 
-                    const f = connection.seq.fetch(box.messages.total + ':*', { bodies: [ '' ] });
+                    console.log(`Pull messages ${uid} ${box.messages.total}:${lastReaded}`);
+
+                    const f = connection.seq.fetch((lastReaded + 1) + ':*', { bodies: [ '' ] });
             
                     f.on('message', function(msg, seqno) {
                         msg.on('body', function(stream, info) {
@@ -130,7 +132,7 @@ export class ImapPool extends BasePool<ParsedMail> {
                     preferences[uid].lastReaded = box.messages.total;
                     preferences.save();
             
-                    console.log(`Update offset of ${uid}: ${preferences[uid].lastReaded}`);
+                    console.log(`Update offset of ${uid} from ${lastReaded} to ${preferences[uid].lastReaded}`);
                 });
             }
         });
